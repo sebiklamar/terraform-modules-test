@@ -5,13 +5,14 @@ resource "proxmox_virtual_environment_vm" "this" {
 
   name        = each.key
   description = each.value.machine_type == "controlplane" ? "Talos Control Plane" : "Talos Worker"
-  tags        = each.value.machine_type == "controlplane" ? ["k8s", "control-plane"] : ["k8s", "worker"]
+  tags        = each.value.machine_type == "controlplane" ? ["IaC", "k8s", "control-plane"] : ["IaC", "k8s", "worker"]
   on_boot     = true
   vm_id       = each.value.vm_id
 
   machine       = "q35"
   scsi_hardware = "virtio-scsi-single"
   bios          = "seabios"
+  pool_id       = "Test"
 
   agent {
     enabled = true
@@ -29,6 +30,7 @@ resource "proxmox_virtual_environment_vm" "this" {
   network_device {
     bridge      = "vmbr0"
     mac_address = each.value.mac_address
+    vlan_id     = each.value.vlan_id
   }
 
   disk {
@@ -39,7 +41,7 @@ resource "proxmox_virtual_environment_vm" "this" {
     discard      = "on"
     ssd          = true
     file_format  = "raw"
-    size         = 20
+    size         = 17
     file_id      = proxmox_virtual_environment_download_file.this["${each.value.host_node}_${each.value.update == true ? local.update_image_id : local.image_id}"].id
   }
 

@@ -13,12 +13,12 @@ variable "proxmox" {
 variable "image" {
   description = "Talos image configuration"
   type = object({
-    factory_url = optional(string, "https://factory.talos.dev")
-    version   = string
-    update_schematic = optional(string)
-    update_version = optional(string)
-    arch = optional(string, "amd64")
-    platform = optional(string, "nocloud")
+    factory_url       = optional(string, "https://factory.talos.dev")
+    version           = string
+    update_schematic  = optional(string)
+    update_version    = optional(string)
+    arch              = optional(string, "amd64")
+    platform          = optional(string, "nocloud")
     proxmox_datastore = optional(string, "local")
   })
 }
@@ -39,13 +39,14 @@ variable "nodes" {
   type = map(object({
     host_node     = string
     machine_type  = string
-    datastore_id = optional(string, "local-zfs")
+    datastore_id  = optional(string, "local-zfs")
     ip            = string
     mac_address   = string
     vm_id         = number
     cpu           = number
     ram_dedicated = number
-    update = optional(bool, false)
-    igpu = optional(bool, false)
+    update        = optional(bool, false)
+    igpu          = optional(bool, false)
+    vlan_id       = optional(number, 0)
   }))
 }
